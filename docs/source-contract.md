@@ -4,7 +4,7 @@
 
 `textDocument/diagnostic`请求带textDocument.uri及可选previousResultId，结果分Full与Unchanged；Unchanged表示调用者已有对应resultId报告。Full诊断有severity、message、Range以及服务版本。`textDocument/didChange`推进文档版本。`workspace/diagnostic`使用partialResultToken通过`$/progress`逐批返回，最后用JSON-RPC response结束；正常模式中所有本地文件都能被报告。`startProvider({scenario:'partial'})`在收到取消时中止部分返回，不能误解为其余文件没有诊断。
 
-诊断可能引用另一个文件；报告存储至少区分URI、文档版本、服务实例和resultId。每次TCP连接创建新的逻辑服务实例，连接断开后旧实例的resultId不能用于新实例。客户端可发送$/cancelRequest通知。增量响应仅用于重用既有完整报告，不能因为un​changed没有items就删除旧问题。连接使用Node net的字节流，单个JSON-RPC帧可能被分段、粘连。此服务只产生合成诊断，不执行项目代码、修复代码或接入外部语言服务器。
+诊断可能引用另一个文件；报告存储至少区分URI、文档版本、服务实例和resultId。每次TCP连接创建新的逻辑服务实例，连接断开后旧实例的resultId不能用于新实例。客户端可发送$/cancelRequest通知。增量响应仅用于重用既有完整报告，不能因为unchanged没有items就删除旧问题。连接使用Node net的字节流，单个JSON-RPC帧可能被分段、粘连。此服务只产生合成诊断，不执行项目代码、修复代码或接入外部语言服务器。
 
 ## 来源与支持范围
 
