@@ -1,0 +1,40 @@
+{
+  "workspace": {
+    "uri": "file:///workspace",
+    "version": "workspace-r7",
+    "items": [
+      "file:///workspace/a.js",
+      "file:///workspace/b.js"
+    ]
+  },
+  "reports": {
+    "file:///workspace/a.js": {
+      "kind": "full",
+      "resultId": "a-r1",
+      "items": [
+        {
+          "message": "imported symbol unused",
+          "severity": 2,
+          "range": {
+            "start": 3,
+            "end": 8
+          }
+        }
+      ]
+    },
+    "file:///workspace/b.js": {
+      "kind": "full",
+      "resultId": "b-r1",
+      "items": [
+        {
+          "message": "unknown imported symbol",
+          "severity": 1,
+          "range": {
+            "start": 1,
+            "end": 7
+          }
+        }
+      ]
+    }
+  }
+}
