@@ -59,10 +59,12 @@ export async function startProvider(options = {}) {
       for (const [uri, report] of Object.entries(state.reports)) if (!s.reports.has(uri)) items.push([uri, report]);
       const first = items.slice(0, partial ? 1 : items.length);
       response(s, { jsonrpc: '2.0', method: '$/progress', params: { token: message.params.partialResultToken, value: { items: first.map(([uri, report]) => ({ uri, version: s.currentVersion, kind: 'full', resultId: report.resultId, items: report.items })) } } });
-      if (partial && s.cancelled.has(id)) { s.nextDiagnostic = null; return; }
-      const remaining = items.slice(first.length);
-      response(s, { jsonrpc: '2.0', id, result: { items: [], ...(partial ? {} : { items: remaining.map(([uri, report]) => ({ uri, version: s.currentVersion, kind: 'full', resultId: report.resultId, items: report.items })) }) } });
-      s.nextDiagnostic = null;
+      setImmediate(() => {
+        if (partial && s.cancelled.has(id)) { s.nextDiagnostic = null; return; }
+        const remaining = items.slice(first.length);
+        response(s, { jsonrpc: '2.0', id, result: { items: [], ...(partial ? {} : { items: remaining.map(([uri, report]) => ({ uri, version: s.currentVersion, kind: 'full', resultId: report.resultId, items: report.items })) }) } });
+        s.nextDiagnostic = null;
+      });
     } else if (message.id !== undefined) response(s, { jsonrpc: '2.0', id: message.id, error: { code: -32601, message: 'Method not found' } });
   }
   await new Promise((resolve, reject) => { server.once('error', reject); server.listen(options.port ?? 0, options.host ?? '127.0.0.1', resolve); });
